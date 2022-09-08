@@ -1,6 +1,8 @@
+/** @jsxImportSource @emotion/react  */
 import React, { useState, useRef, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { css } from "@emotion/react";
 
 function App() {
   const [showAdd, setShowAdd] = useState(false);
@@ -55,13 +57,54 @@ function App() {
   };
 
   const KanbanBoard = ({ children }) => (
-    <main className="kanban-board">{children}</main>
+    // <main className="kanban-board">{children}</main>
+    <main
+      css={css`
+        flex: 10;
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin: 0 1rem 1rem;
+      `}
+    >
+      {children}
+    </main>
   );
 
   const KanbanColumn = ({ children, className, title }) => {
     const combinedClassName = `kanban-column ${className}`;
     return (
-      <section className={combinedClassName}>
+      <section
+        // className={className}
+        className={combinedClassName}
+        // css={css`
+        //   flex: 1 1;
+        //   display: flex;
+        //   flex-direction: column;
+        //   border: 1px solid gray;
+        //   border-radius: 1rem;
+        //   & > h2 {
+        //     margin: 0.6rem 1rem;
+        //     padding-bottom: 0.6rem;
+        //     border-bottom: 1px solid gray;
+        //     & > button {
+        //       float: right;
+        //       margin-top: 0.2rem;
+        //       padding: 0.2rem 0.5rem;
+        //       border: 0;
+        //       border-radius: 1rem;
+        //       height: 1.8rem;
+        //       line-height: 1rem;
+        //       font-size: 1rem;
+        //     }
+        //   }
+        //   & > ul {
+        //     margin: 0.6rem 1rem;
+        //     padding-bottom: 0.6rem;
+        //     border-bottom: 1px solid gray;
+        //   }
+        // `}
+      >
         <h2>{title}</h2>
         <ul>{children}</ul>
       </section>
@@ -76,7 +119,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>我的看板</h1>
+        <h1>KanBan</h1>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
 

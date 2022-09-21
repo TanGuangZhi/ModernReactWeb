@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import KanbanBoard from "./KanbanBoard";
 import { KanbanCard } from "./KanbanCard";
 import { KanbanNewCard } from "./KanbanNewCard";
 import { KanbanColumn } from "./KanbanColumn";
+import { UseMemoExample } from "./test/UseMemoExample";
 
 const COLUMN_BG_COLORS = {
   todo: "#C9AF97",
@@ -15,6 +16,8 @@ const COLUMN_BG_COLORS = {
 
 function App() {
   const [showAdd, setShowAdd] = useState(false);
+  const [num, setNum] = useState("0");
+  const [num2, setNum2] = useState("0");
   const [todoList, setTodoList] = useState([
     { title: "开发任务-1", status: "2022-05-22 18:15" },
     { title: "开发任务-3", status: "2022-06-22 18:15" },
@@ -41,12 +44,22 @@ function App() {
     setShowAdd(false);
   };
 
+  const useMemoTest = useMemo(() => {
+    const n = parseInt(num, 10);
+    console.log("useMemo", n);
+  }, [num]);
+
+  const useMemoTest_useEffect = useEffect(() => {
+    const n = parseInt(num, 10);
+    console.log("useEffect", n);
+  }, [num]);
   return (
     <div className="App">
       <header className="App-header">
         <h1>我的看板</h1>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
+      {/* <UseMemoExample /> */}
       <KanbanBoard>
         <KanbanColumn
           bgColor={COLUMN_BG_COLORS.todo}
@@ -64,7 +77,23 @@ function App() {
             <KanbanCard key={props.title} {...props} />
           ))}
         </KanbanColumn>
-        <KanbanColumn bgColor={COLUMN_BG_COLORS.ongoing} title="进行中">
+        <KanbanColumn
+          bgColor={COLUMN_BG_COLORS.ongoing}
+          title={
+            <>
+              进行中
+              {/* <button onClick={() => setNum(() => 1 + num)} disabled={showAdd}>
+                useMemoTest
+              </button>
+              <button
+                onClick={() => setNum2(() => 1 + num2)}
+                disabled={showAdd}
+              >
+                useMemoTest_useEffect
+              </button> */}
+            </>
+          }
+        >
           {ongoingList.map((props) => (
             <KanbanCard key={props.title} {...props} />
           ))}

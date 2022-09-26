@@ -24,7 +24,7 @@ export const kanbanCardTitleStyles = css`
   min-height: 3rem;
 `;
 
-export const KanbanCard = ({ title, status }) => {
+export const KanbanCard = ({ title, status, onDragStart, onRemove }) => {
   const [displayTime, setDisplayTime] = useState(status);
 
   useEffect(() => {
@@ -49,8 +49,14 @@ export const KanbanCard = ({ title, status }) => {
     };
   }, [status]);
 
+  const handleDragStart = (evt) => {
+    evt.dataTransfer.effectAllowed = "move";
+    evt.dataTransfer.setData("text/plain", title);
+    onDragStart && onDragStart(evt);
+  };
+
   return (
-    <li css={kanbanCardStyles}>
+    <li css={kanbanCardStyles} draggable onDragStart={handleDragStart}>
       <div css={kanbanCardTitleStyles}>{title}</div>
       <div
         css={css`

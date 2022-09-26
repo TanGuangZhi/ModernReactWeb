@@ -2,14 +2,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import KanbanBoard from "./KanbanBoard";
-import { KanbanColumn } from "./KanbanColumn";
-
-const COLUMN_BG_COLORS = {
-  todo: "#C9AF97",
-  ongoing: "#FFE799",
-  done: "#C0E8BA",
-};
+import KanbanBoard, {
+  COLUMN_KEY_DONE,
+  COLUMN_KEY_ONGOING,
+  COLUMN_KEY_TODO,
+} from "./KanbanBoard";
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -27,9 +24,36 @@ function App() {
     { title: "开发任务-2", status: "2022-06-24 18:15" },
     { title: "测试任务-1", status: "2022-07-03 18:15" },
   ]);
-  const handleAdd = (newAdd) => {
-    setTodoList((currentTodoList) => [newAdd, ...currentTodoList]);
+  // 对这个写法有疑问，经下面的 a-01 测试理解了, 这样写可以将变量作为 key 去使用。 2022-09-26
+  const updaters = {
+    [COLUMN_KEY_TODO]: setTodoList,
+    [COLUMN_KEY_ONGOING]: setOngoingList,
+    [COLUMN_KEY_DONE]: setDoneList,
   };
+  const handleAdd = (column, newCard) => {
+    // console.log(column, newCard);
+    updaters[column]((currentStat) => [newCard, ...currentStat]);
+  };
+  const handleRemove = (column, cardToRemove) => {
+    updaters[column]((currentStat) =>
+      currentStat.filter((item) => item.title !== cardToRemove.title)
+    );
+  };
+
+  // ## test a-01
+  // const testObj = {
+  //   ["one"]: "this is 1111",
+  //   ["two"]: "this is 2222",
+  //   three: "this is 3333",
+  //   COLUMN_KEY_DONE: "this is constant variable", // 这样写，前面的 key 是个常量
+  //   [COLUMN_KEY_DONE]: "this is constant variable with []", // 这样写，前面的 key 是个变量，即“done”
+  // };
+  // console.log(testObj);
+  // console.log(testObj["one"]);
+  // console.log(testObj.three);
+  // console.log(testObj.COLUMN_KEY_DONE);
+  // console.log(testObj[COLUMN_KEY_DONE]);
+  // console.log(testObj.done);
 
   return (
     <div className="App">
@@ -38,27 +62,14 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
       </header>
 
-      <KanbanBoard>
-        <KanbanColumn
-          bgColor={COLUMN_BG_COLORS.todo}
-          title="待处理"
-          cardList={todoList}
-          onAdd={handleAdd}
-          canAddNew
-        ></KanbanColumn>
-
-        <KanbanColumn
-          bgColor={COLUMN_BG_COLORS.ongoing}
-          title="进行中"
-          cardList={ongoingList}
-        ></KanbanColumn>
-
-        <KanbanColumn
-          bgColor={COLUMN_BG_COLORS.done}
-          title="已完成"
-          cardList={doneList}
-        ></KanbanColumn>
-      </KanbanBoard>
+      <KanbanBoard
+        // {...(todoList, ongoingList, doneList)}
+        todoList={todoList}
+        ongoingList={ongoingList}
+        doneList={doneList}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+      ></KanbanBoard>
     </div>
   );
 }

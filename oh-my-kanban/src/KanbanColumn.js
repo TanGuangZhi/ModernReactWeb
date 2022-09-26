@@ -44,6 +44,7 @@ export const KanbanColumn = ({
   canAddNew,
   cardList = [],
   onDrop,
+  onRemove,
   onAdd,
   setDraggedItem,
   setIsDragSource = () => {},
@@ -60,6 +61,26 @@ export const KanbanColumn = ({
   };
   return (
     <section
+      onDragStart={() => setIsDragSource(true)}
+      onDragOver={(evt) => {
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = "move";
+        setIsDragTarget(true);
+      }}
+      onDragLeave={(evt) => {
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = "none";
+        setIsDragTarget(false);
+      }}
+      onDrop={(evt) => {
+        evt.preventDefault();
+        onDrop && onDrop(evt);
+      }}
+      onDragEnd={(evt) => {
+        evt.preventDefault();
+        setIsDragSource(false);
+        setIsDragTarget(false);
+      }}
       css={css`
         ${kanbanColumnStyles}
         background-color: ${bgColor};
@@ -82,6 +103,7 @@ export const KanbanColumn = ({
             onDragStart={() => {
               setDraggedItem && setDraggedItem(item);
             }}
+            onRemove={onRemove}
             {...item}
           />
         ))}

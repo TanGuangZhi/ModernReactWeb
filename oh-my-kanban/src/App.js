@@ -25,6 +25,7 @@ function App() {
     { title: "开发任务-2", status: "2022-06-24 18:15" },
     { title: "测试任务-1", status: "2022-07-03 18:15" },
   ]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   // 对这个写法有疑问，经下面的 a-01 测试理解了, 这样写可以将变量作为 key 去使用。 2022-09-26
   const updaters = {
@@ -45,6 +46,15 @@ function App() {
   const handleToggleAdmin = (evt) => {
     setIsAdmin(!isAdmin);
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTodoList(todoList);
+      setOngoingList(ongoingList);
+      setDoneList(doneList);
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   // ## test a-01
   // const testObj = {
@@ -85,6 +95,7 @@ function App() {
           doneList={doneList}
           onAdd={handleAdd}
           onRemove={handleRemove}
+          isLoading={isLoading}
         ></KanbanBoard>
       </AdminContext.Provider>
     </div>

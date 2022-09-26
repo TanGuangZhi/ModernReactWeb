@@ -3,8 +3,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import KanbanBoard from "./KanbanBoard";
-import { KanbanCard } from "./KanbanCard";
-import { KanbanNewCard } from "./KanbanNewCard";
 import { KanbanColumn } from "./KanbanColumn";
 
 const COLUMN_BG_COLORS = {
@@ -29,11 +27,8 @@ function App() {
     { title: "开发任务-2", status: "2022-06-24 18:15" },
     { title: "测试任务-1", status: "2022-07-03 18:15" },
   ]);
-  const handleSubmit = (title) => {
-    setTodoList((currentTodoList) => [
-      { title, status: new Date().toString() },
-      ...currentTodoList,
-    ]);
+  const handleAdd = (newAdd) => {
+    setTodoList((currentTodoList) => [newAdd, ...currentTodoList]);
   };
 
   return (
@@ -48,13 +43,13 @@ function App() {
           bgColor={COLUMN_BG_COLORS.todo}
           title="待处理"
           cardList={todoList}
-          onAdd={handleSubmit}
+          onAdd={handleAdd}
           canAddNew
         ></KanbanColumn>
 
         <KanbanColumn
           bgColor={COLUMN_BG_COLORS.ongoing}
-          title={<>进行中</>}
+          title="进行中"
           cardList={ongoingList}
         ></KanbanColumn>
 

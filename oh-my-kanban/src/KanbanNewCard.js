@@ -12,7 +12,7 @@ export const KanbanNewCard = ({ onSubmit }) => {
 
   const handleKeyDown = (evt) => {
     if (evt.key === "Enter") {
-      onSubmit(title);
+      onSubmit({ title, status: new Date().toString() });
     }
   };
 

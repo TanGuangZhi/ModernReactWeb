@@ -54,8 +54,8 @@ export const KanbanColumn = ({
     setShowAdd(true);
   };
 
-  const handleSubmit = (title) => {
-    onAdd && onAdd(title);
+  const handleSubmit = (newCard) => {
+    onAdd && onAdd(newCard);
     setShowAdd(false);
   };
   return (

@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
+import AdminContext from "./context/AdminContext";
 import { css } from "@emotion/react";
 import { KanbanColumn } from "./KanbanColumn";
 

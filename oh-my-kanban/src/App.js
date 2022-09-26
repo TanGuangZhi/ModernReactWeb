@@ -7,6 +7,7 @@ import KanbanBoard, {
   COLUMN_KEY_ONGOING,
   COLUMN_KEY_TODO,
 } from "./KanbanBoard";
+import AdminContext from "./context/AdminContext";
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -24,6 +25,7 @@ function App() {
     { title: "开发任务-2", status: "2022-06-24 18:15" },
     { title: "测试任务-1", status: "2022-07-03 18:15" },
   ]);
+  const [isAdmin, setIsAdmin] = useState(false);
   // 对这个写法有疑问，经下面的 a-01 测试理解了, 这样写可以将变量作为 key 去使用。 2022-09-26
   const updaters = {
     [COLUMN_KEY_TODO]: setTodoList,
@@ -38,6 +40,10 @@ function App() {
     updaters[column]((currentStat) =>
       currentStat.filter((item) => item.title !== cardToRemove.title)
     );
+  };
+
+  const handleToggleAdmin = (evt) => {
+    setIsAdmin(!isAdmin);
   };
 
   // ## test a-01
@@ -58,18 +64,29 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>我的看板</h1>
+        <h1>
+          我的看板
+          <label>
+            <input
+              type="checkbox"
+              value={isAdmin}
+              onChange={handleToggleAdmin}
+            />
+            管理员模式
+          </label>
+        </h1>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-
-      <KanbanBoard
-        // {...(todoList, ongoingList, doneList)}
-        todoList={todoList}
-        ongoingList={ongoingList}
-        doneList={doneList}
-        onAdd={handleAdd}
-        onRemove={handleRemove}
-      ></KanbanBoard>
+      <AdminContext.Provider value={{ isAdmin }}>
+        <KanbanBoard
+          // {...(todoList, ongoingList, doneList)}
+          todoList={todoList}
+          ongoingList={ongoingList}
+          doneList={doneList}
+          onAdd={handleAdd}
+          onRemove={handleRemove}
+        ></KanbanBoard>
+      </AdminContext.Provider>
     </div>
   );
 }
